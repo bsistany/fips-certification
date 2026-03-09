@@ -1,36 +1,12 @@
 #!/bin/bash
-# Run this from inside your cloned GitHub repo folder
-# e.g.: cd fips-learn && bash setup.sh
+# Run from inside your cloned fips-certification repo folder
+# bash setup.sh
 
-mkdir -p module-definition
-mkdir -p acvts-testing/aes
-mkdir -p acvts-testing/sha2
-mkdir -p acvts-testing/sha3
-mkdir -p acvts-testing/hmac
-mkdir -p acvts-testing/rsa
-mkdir -p acvts-testing/ecdsa
-mkdir -p security-policy
-mkdir -p lab-simulation
-mkdir -p certificate-simulation
+mkdir -p src include tests docs
 
-echo "# TODO: Sprint placeholder" > module-definition/boundary.md
-echo "# TODO: Sprint placeholder" > module-definition/algorithm-inventory.md
-echo "# TODO: Sprint placeholder" > acvts-testing/aes/test-vectors.json
-echo "# TODO: Sprint placeholder" > acvts-testing/aes/run_tests.py
-echo "# TODO: Sprint placeholder" > acvts-testing/aes/results.json
-echo "# TODO: Sprint placeholder" > acvts-testing/sha2/test-vectors.json
-echo "# TODO: Sprint placeholder" > acvts-testing/sha2/run_tests.py
-echo "# TODO: Sprint placeholder" > acvts-testing/sha3/test-vectors.json
-echo "# TODO: Sprint placeholder" > acvts-testing/sha3/run_tests.py
-echo "# TODO: Sprint placeholder" > acvts-testing/hmac/test-vectors.json
-echo "# TODO: Sprint placeholder" > acvts-testing/hmac/run_tests.py
-echo "# TODO: Sprint placeholder" > acvts-testing/rsa/test-vectors.json
-echo "# TODO: Sprint placeholder" > acvts-testing/rsa/run_tests.py
-echo "# TODO: Sprint placeholder" > acvts-testing/ecdsa/test-vectors.json
-echo "# TODO: Sprint placeholder" > acvts-testing/ecdsa/run_tests.py
-echo "# TODO: Sprint placeholder" > security-policy/security-policy.md
-echo "# TODO: Sprint placeholder" > lab-simulation/checklist.md
-echo "# TODO: Sprint placeholder" > lab-simulation/lab-report.md
-echo "# TODO: Sprint placeholder" > certificate-simulation/certificate.md
+for f in src/aes.c src/sha256.c src/hmac.c src/fips.c src/self_test.c src/pbkdf2.c; do echo "/* TODO */" > "$f"; done
+for f in include/aes.h include/sha256.h include/hmac.h include/fips.h include/self_test.h include/pbkdf2.h; do echo "/* TODO */" > "$f"; done
+for f in tests/test_aes.c tests/test_sha256.c tests/test_hmac.c tests/test_fips_mode.c tests/test_self_test.c tests/test_pbkdf2.c; do echo "/* TODO */" > "$f"; done
+for f in docs/boundary.md docs/algorithm-inventory.md docs/security-policy.md; do echo "# TODO" > "$f"; done
 
 echo "Done. Structure created."
