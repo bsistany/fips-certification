@@ -136,13 +136,18 @@ their classification. This is the enforcement table used by
 CAVP certificates are required for every approved algorithm before a CMVP
 submission. The table below tracks validation status for this module.
 
-| Algorithm | CAVP Required | Status |
-|---|---|---|
-| AES-128-CBC | Yes | ⬜ Simulated only — Sprint 8 planned |
-| AES-256-CBC | Yes | ⬜ Simulated only — Sprint 8 planned |
-| SHA-256 | Yes | ⬜ Simulated only — Sprint 8 planned |
-| HMAC-SHA-256 | Yes | ⬜ Simulated only — Sprint 8 planned |
-| PBKDF2-HMAC-SHA-256 | Yes | ⬜ Simulated only — Sprint 8 planned |
+| Algorithm | ACVP String | Vectors | Local Simulation | Demo Server |
+|---|---|---|---|---|
+| AES-256-CBC | ACVP-AES-CBC | 8 | ✅ Sprint 8 — `acvp/request/aes_cbc.json` | ⬜ Sprint 9 |
+| SHA-256 | ACVP-SHA2-256 | 11 | ✅ Sprint 8 — `acvp/request/sha256.json` | ⬜ Sprint 9 |
+| HMAC-SHA-256 | ACVP-HMAC-SHA2-256 | 12 | ✅ Sprint 8 — `acvp/request/hmac_sha256.json` | ⬜ Sprint 9 |
+| PBKDF2-HMAC-SHA-256 | ACVP-KDF-PBKDF2 | 12 | ✅ Sprint 8 — `acvp/request/pbkdf2.json` | ⬜ Sprint 9 |
 
-> For a real submission each algorithm would need to be tested against NIST's
-> ACVP server (demo.acvts.nist.gov) and receive a certificate number.
+> ACVP local simulation uses Python's `cryptography` library as the trusted
+> reference (Stage 1), the C library as the implementation under test (Stage 2),
+> and an independent Python validator for result checking (Stage 3). All 43
+> vectors passed. Run `make acvp-test` to reproduce.
+>
+> For a real CMVP submission each algorithm must be tested against NIST's ACVP
+> server (`demo.acvts.nist.gov`) and receive a certificate number. Demo server
+> registration and submission is planned for Sprint 9.

@@ -1,7 +1,7 @@
 CC      = gcc
 CFLAGS  = -Wall -Wextra -std=c99 -Iinclude
 
-.PHONY: all compile link test clean analyse-boundary
+.PHONY: all compile link test clean analyse-boundary acvp-test
 
 all: compile link test
 
@@ -40,3 +40,9 @@ analyse-boundary: compile
 clean:
 	rm -f src/*.o tests/test_aes tests/test_sha256 tests/test_hmac \
 	      tests/test_fips_mode tests/test_self_test tests/test_pbkdf2
+
+acvp-test: compile
+        $(MAKE) -C acvp acvp-test
+
+acvp-clean:
+        $(MAKE) -C acvp clean
