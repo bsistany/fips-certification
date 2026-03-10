@@ -111,6 +111,25 @@
 
 ---
 
+## NSP Alignment Sprint ✅
+**Goal:** Restructure `docs/security-policy.md` to fully align with the section order and content requirements of SP 800-140Br1 and ISO/IEC 19790:2012 Annex B.
+
+**Changes:**
+- Renumbered all sections to B.2.1 through B.2.12 in the required order
+- Added B.2.3 Cryptographic Module Interfaces (was missing)
+- Added B.2.5 Software/Firmware Security with tested platforms and compiler flags (was missing)
+- Added B.2.8 Non-Invasive Security — marked N/A at Level 1 with justification (was missing)
+- Added B.2.11 Lifecycle Assurance with CM table and known gaps (was missing)
+- Added B.2.12 Mitigation of Other Attacks — marked N/A with justification (was missing)
+- Added ASCII block diagram to B.2.2 (was missing); noted as Gap #9
+- Restructured B.2.9 SSP table to match SP 800-140Br1 required columns
+- Demoted Approved/Non-Approved Algorithms, Known Gaps, and References to appendices
+- Known gaps expanded from 8 to 12 items to cover newly identified documentation gaps
+
+**Reference:** SP 800-140Br1, ISO/IEC 19790:2012 Annex B
+
+---
+
 ## Sprint 8 — CAVP Simulation ⬜
 **Goal:** Simulate CAVP algorithm validation using ACVP-format test vectors fed to the actual C library. Produce results in ACVP response format for each approved algorithm.
 
