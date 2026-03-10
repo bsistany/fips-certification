@@ -1,7 +1,7 @@
 CC      = gcc
 CFLAGS  = -Wall -Wextra -std=c99 -Iinclude
 
-.PHONY: all compile link test clean
+.PHONY: all compile link test clean analyse-boundary
 
 all: compile link test
 
@@ -33,6 +33,9 @@ test: link
 	./tests/test_fips_mode
 	./tests/test_self_test
 	./tests/test_pbkdf2
+
+analyse-boundary: compile
+	python3 tools/analyze_boundary.py
 
 clean:
 	rm -f src/*.o tests/test_aes tests/test_sha256 tests/test_hmac \
