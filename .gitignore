@@ -8,3 +8,7 @@ tests/test_hmac
 tests/test_fips_mode
 tests/test_self_test
 tests/test_pbkdf2
+
+# ACVP — generated at runtime, not committed
+acvp/request/*.json
+acvp/response/*.json

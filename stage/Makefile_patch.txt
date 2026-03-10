@@ -1,0 +1,14 @@
+# ---------------------------------------------------------------------------
+# Add these two targets to the top-level Makefile
+# ---------------------------------------------------------------------------
+
+# Add "acvp-test" to the .PHONY line:
+#   .PHONY: all compile link test clean analyse-boundary acvp-test
+
+# Add these targets after the existing "clean" target:
+
+acvp-test: compile
+	$(MAKE) -C acvp acvp-test
+
+acvp-clean:
+	$(MAKE) -C acvp clean
