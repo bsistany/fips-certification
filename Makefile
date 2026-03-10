@@ -42,7 +42,7 @@ clean:
 	      tests/test_fips_mode tests/test_self_test tests/test_pbkdf2
 
 acvp-test: compile
-        $(MAKE) -C acvp acvp-test
+	$(MAKE) -C acvp acvp-test
 
 acvp-clean:
-        $(MAKE) -C acvp clean
+	$(MAKE) -C acvp clean
