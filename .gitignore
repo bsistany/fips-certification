@@ -1,3 +1,10 @@
 __pycache__/
 *.pyc
 .DS_Store
+src/*.o
+tests/test_aes
+tests/test_sha256
+tests/test_hmac
+tests/test_fips_mode
+tests/test_self_test
+tests/test_pbkdf2
