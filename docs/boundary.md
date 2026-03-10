@@ -159,7 +159,6 @@ to a CMVP lab.
 
 | Gap | Description | FIPS Reference |
 |---|---|---|
-| `fips_set_self_test_passed` is public | This function should be internal only. As a public symbol it allows a caller to bypass the self-test requirement. | FIPS 140-3 §10.3.1 |
 | No software integrity test | POST should include an HMAC-SHA-256 over the module's own compiled binary compared to a reference value embedded at build time. | FIPS 140-3 §10.3.1 |
 | No DRBG | An approved Deterministic Random Bit Generator (CTR_DRBG or HMAC_DRBG per SP 800-90A) is required for key generation. | SP 800-90A Rev 1 |
 | No CRNGT | Required on every DRBG output — not applicable until a DRBG is implemented. | FIPS 140-3 §10.3.2 |
@@ -199,8 +198,6 @@ To reproduce, run the same command against the current codebase.
     fips_mode_disable
     fips_mode_enable
     fips_mode_status
-    fips_self_test_passed
-    fips_set_self_test_passed      <- GAP: should be internal
 
   [hmac.o]
     hmac_sha256

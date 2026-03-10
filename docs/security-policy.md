@@ -240,15 +240,14 @@ They are documented here for completeness and as a learning reference.
 
 | # | Gap | Impact | Reference |
 |---|---|---|---|
-| 1 | `fips_set_self_test_passed` is a public symbol | Allows caller to bypass self-test requirement | FIPS 140-3 §10.3.1 |
-| 2 | No software integrity test in POST | Module binary could be tampered without detection | FIPS 140-3 §10.3.1 |
-| 3 | No DRBG | Cannot generate keys internally | SP 800-90A Rev 1 |
-| 4 | No CRNGT | Not applicable until DRBG is implemented | FIPS 140-3 §10.3.2 |
-| 5 | No asymmetric algorithms | No digital signatures or key agreement | FIPS 186-5 |
-| 6 | No PCT | Not applicable until asymmetric algorithms are implemented | FIPS 140-3 §10.3.3 |
-| 7 | Zeroization uses volatile writes only | Not guaranteed by C standard to be effective on all compilers | FIPS 140-3 §7.9 |
-| 8 | HMAC minimum key length not enforced at API level | Caller could pass a key shorter than 112 bits in FIPS mode | FIPS 198-1, SP 800-131A |
-| 9 | No CAVP certificates | All algorithm testing is internal — not externally validated | CMVP prerequisite |
+| 1 | No software integrity test in POST | Module binary could be tampered without detection | FIPS 140-3 §10.3.1 |
+| 2 | No DRBG | Cannot generate keys internally | SP 800-90A Rev 1 |
+| 3 | No CRNGT | Not applicable until DRBG is implemented | FIPS 140-3 §10.3.2 |
+| 4 | No asymmetric algorithms | No digital signatures or key agreement | FIPS 186-5 |
+| 5 | No PCT | Not applicable until asymmetric algorithms are implemented | FIPS 140-3 §10.3.3 |
+| 6 | Zeroization uses volatile writes only | Not guaranteed by C standard to be effective on all compilers | FIPS 140-3 §7.9 |
+| 7 | HMAC minimum key length not enforced at API level | Caller could pass a key shorter than 112 bits in FIPS mode | FIPS 198-1, SP 800-131A |
+| 8 | No CAVP certificates | All algorithm testing is internal — not externally validated | CMVP prerequisite |
 
 ---
 
