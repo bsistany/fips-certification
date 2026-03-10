@@ -91,17 +91,14 @@ int fips_self_test_run(void) {
     fips_set_self_test_passed(0);
 
     if (kat_aes() != 0) {
-        fprintf(stderr, "FIPS KAT FAILED: AES-128-CBC\n");
         failed++;
     }
 
     if (kat_sha256() != 0) {
-        fprintf(stderr, "FIPS KAT FAILED: SHA-256\n");
         failed++;
     }
 
     if (kat_hmac_sha256() != 0) {
-        fprintf(stderr, "FIPS KAT FAILED: HMAC-SHA-256\n");
         failed++;
     }
 
