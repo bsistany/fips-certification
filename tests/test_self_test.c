@@ -1,4 +1,12 @@
 /*
+ * Copyright (c) 2025 Bahman Sistany
+ * SPDX-License-Identifier: MIT
+ *
+ * Part of fips-crypto — a minimal FIPS 140-3 cryptographic library.
+ * https://github.com/bsistany/fips-certification
+ */
+
+/*
  * test_self_test.c — verify KATs pass and error state works correctly
  *
  * Reference: FIPS 140-3 Section 10.3.1

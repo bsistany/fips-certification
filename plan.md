@@ -130,14 +130,55 @@
 
 ---
 
-## Sprint 8 — CAVP Simulation ⬜
-**Goal:** Simulate CAVP algorithm validation using ACVP-format test vectors fed to the actual C library. Produce results in ACVP response format for each approved algorithm.
+## Sprint 8 — ACVP Simulation (Local) ✅
+**Goal:** Simulate CAVP algorithm validation locally using ACVP-format JSON
+vectors fed to the C library via a C runner binary. Produce ACVP-format
+response JSON and validate output against an independent Python reference.
+
+**Pipeline (three stages):**
+- Stage 1 — `generate_vectors.py`: generates ACVP-format request JSON using
+  Python `cryptography` lib as trusted reference
+- Stage 2 — `acvp_runner`: C binary reads request JSON, calls the library,
+  writes ACVP-format response JSON
+- Stage 3 — `validate_responses.py`: independently compares C output against
+  Python reference; does not trust runner's own `"passed"` field
 
 **Deliverables:**
-- `cavp/aes/vectors.json` + `cavp/aes/results.json`
-- `cavp/sha256/vectors.json` + `cavp/sha256/results.json`
-- `cavp/hmac/vectors.json` + `cavp/hmac/results.json`
-- `cavp/pbkdf2/vectors.json` + `cavp/pbkdf2/results.json`
-- `cavp/run_all.py` — harness that drives the C library via subprocess
+- `acvp/src/acvp_runner.c` — single binary dispatching on `"algorithm"` field
+- `acvp/Makefile` — builds runner; `make acvp-test` drives full pipeline
+- `acvp/scripts/generate_vectors.py` — Stage 1 (Gemini)
+- `acvp/scripts/validate_responses.py` — Stage 3 (Gemini; bug fixed by author)
+- `acvp/request/*.json` — runtime-generated, gitignored
+- `acvp/response/*.json` — runtime-generated, gitignored
+- `docs/acvp_validation_prompt.md` — design record and Gemini prompt
+- `LICENSE`, `CONTRIBUTORS.md`, `SECURITY.md` — repo hygiene
+- Updated: `README.md`, `docs/algorithm-inventory.md`, `docs/security-policy.md`
 
-**Reference:** NIST ACVP, SP 800-140B
+**Results:** 43/43 ACVP vectors passing (8 AES-CBC, 11 SHA-256, 12 HMAC-SHA-256, 12 PBKDF2)
+
+**Design decisions:**
+- ACVP = protocol (files, targets, code); CAVP = program (policy docs)
+- `"expected"` embedded in request JSON — local simulation convention only;
+  to be stripped before Sprint 9 demo server submission
+- Validation scripts authored by Gemini for independence from C implementation;
+  validator bug (tcId-only lookup across multiple testGroups) caught during
+  integration and corrected
+- AFT only; MCT deferred
+- No TLS, no server registration — Sprint 9
+
+**Reference:** NIST ACVP, SP 800-140Br1
+
+---
+
+## Sprint 9 — ACVP Demo Server Submission ⬜
+**Goal:** Register with NIST's ACVP demo server (`demo.acvts.nist.gov`) and
+replay the Sprint 8 local simulation as a real ACVP exchange.
+
+**Planned deliverables:**
+- ACVP client configuration and TLS credentials
+- Strip `"expected"` from request JSON before submission
+- Submit vectors to demo server; retrieve official response
+- Compare demo server results against local simulation results
+- Document any discrepancies
+
+**Reference:** NIST ACVTS, SP 800-140Br1

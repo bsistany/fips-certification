@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025 Bahman Sistany
+ * SPDX-License-Identifier: MIT
+ *
+ * Part of fips-crypto — a minimal FIPS 140-3 cryptographic library.
+ * https://github.com/bsistany/fips-certification
+ */
+
 #ifndef FIPS_H
 #define FIPS_H
 

@@ -1,4 +1,12 @@
 /*
+ * Copyright (c) 2025 Bahman Sistany
+ * SPDX-License-Identifier: MIT
+ *
+ * Part of fips-crypto — a minimal FIPS 140-3 cryptographic library.
+ * https://github.com/bsistany/fips-certification
+ */
+
+/*
  * test_aes.c — AES-128/256 CBC test vectors
  *
  * Vectors from FIPS 197 Appendix B and NIST SP 800-38A Appendix F.2

@@ -1,4 +1,12 @@
 /*
+ * Copyright (c) 2025 Bahman Sistany
+ * SPDX-License-Identifier: MIT
+ *
+ * Part of fips-crypto — a minimal FIPS 140-3 cryptographic library.
+ * https://github.com/bsistany/fips-certification
+ */
+
+/*
  * hmac.c — HMAC-SHA-256
  *
  * Reference: FIPS 198-1

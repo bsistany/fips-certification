@@ -1,4 +1,12 @@
 /*
+ * Copyright (c) 2025 Bahman Sistany
+ * SPDX-License-Identifier: MIT
+ *
+ * Part of fips-crypto — a minimal FIPS 140-3 cryptographic library.
+ * https://github.com/bsistany/fips-certification
+ */
+
+/*
  * pbkdf2.c — PBKDF2-HMAC-SHA-256
  *
  * Reference: NIST SP 800-132, RFC 8018 Section 5.2

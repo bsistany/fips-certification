@@ -1,4 +1,12 @@
 /*
+ * Copyright (c) 2025 Bahman Sistany
+ * SPDX-License-Identifier: MIT
+ *
+ * Part of fips-crypto — a minimal FIPS 140-3 cryptographic library.
+ * https://github.com/bsistany/fips-certification
+ */
+
+/*
  * test_sha256.c — SHA-256 test vectors
  *
  * Vectors from FIPS 180-4 Appendix B and NIST CAVS examples.

@@ -1,4 +1,12 @@
 /*
+ * Copyright (c) 2025 Bahman Sistany
+ * SPDX-License-Identifier: MIT
+ *
+ * Part of fips-crypto — a minimal FIPS 140-3 cryptographic library.
+ * https://github.com/bsistany/fips-certification
+ */
+
+/*
  * acvp_runner.c — ACVP Runner (Stage 2)
  *
  * Reads an ACVP-format request JSON, invokes the FIPS cryptographic library,

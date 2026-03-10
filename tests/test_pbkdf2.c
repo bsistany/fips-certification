@@ -1,4 +1,12 @@
 /*
+ * Copyright (c) 2025 Bahman Sistany
+ * SPDX-License-Identifier: MIT
+ *
+ * Part of fips-crypto — a minimal FIPS 140-3 cryptographic library.
+ * https://github.com/bsistany/fips-certification
+ */
+
+/*
  * test_pbkdf2.c — PBKDF2-HMAC-SHA-256 test vectors
  *
  * Vectors from RFC 7914 Section 11 and NIST CAVS examples.
