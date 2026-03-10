@@ -44,12 +44,6 @@ int  fips_mode_active (void);
 const char *fips_mode_status(void);
 
 /* ------------------------------------------------------------------ */
-/* Self-test state (set by self_test.c)                               */
-/* ------------------------------------------------------------------ */
-void fips_set_self_test_passed(int passed);
-int  fips_self_test_passed(void);
-
-/* ------------------------------------------------------------------ */
 /* Algorithm approval check                                           */
 /* ------------------------------------------------------------------ */
 

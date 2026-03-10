@@ -40,7 +40,7 @@ int main(void) {
     fips_mode_enable();
 
     /* Before KATs: self-test flag is clear, module is in error state */
-    check_int("Self-test not passed before KATs",  fips_self_test_passed(), 0);
+    check_str("Status is error before KATs",       fips_mode_status(), "error");
     check_str("Status is error before KATs",       fips_mode_status(), "error");
     check_int("AES blocked before KATs",
               fips_check_algorithm(ALG_AES_128_CBC), FIPS_ERR_SELF_TEST);
@@ -48,7 +48,7 @@ int main(void) {
     /* Run KATs */
     int result = fips_self_test_run();
     check_int("fips_self_test_run() returns 0",    result, 0);
-    check_int("Self-test passed after KATs",       fips_self_test_passed(), 1);
+    check_str("Status is approved after KATs",     fips_mode_status(), "approved");
     check_str("Status is approved after KATs",     fips_mode_status(), "approved");
 
     /* Approved algorithms now unblocked */
@@ -63,10 +63,11 @@ int main(void) {
     check_int("MD5 still blocked after KATs",
               fips_check_algorithm(ALG_MD5), FIPS_ERR_NOT_APPROVED);
 
-    /* Simulate a KAT failure by manually clearing the flag */
-    fips_set_self_test_passed(0);
-    check_str("Status is error after flag cleared", fips_mode_status(), "error");
-    check_int("AES blocked again after flag cleared",
+    /* Simulate error state by disabling and re-enabling FIPS mode without running KATs */
+    fips_mode_disable();
+    fips_mode_enable();
+    check_str("Status is error after re-enable without KATs", fips_mode_status(), "error");
+    check_int("AES blocked again without KATs",
               fips_check_algorithm(ALG_AES_128_CBC), FIPS_ERR_SELF_TEST);
 
     printf("\n%d/%d tests passed\n", tests_passed, tests_run);

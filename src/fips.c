@@ -5,6 +5,7 @@
  */
 
 #include "fips.h"
+#include "fips_internal.h"
 
 /* ------------------------------------------------------------------ */
 /* Module state                                                        */
@@ -15,7 +16,7 @@ static int self_test_ok       = 0;  /* set to 1 after KATs pass         */
 /* ------------------------------------------------------------------ */
 /* FIPS mode control                                                   */
 /* ------------------------------------------------------------------ */
-void fips_mode_enable(void)  { fips_mode_on = 1; }
+void fips_mode_enable(void)  { fips_mode_on = 1; self_test_ok = 0; }
 void fips_mode_disable(void) { fips_mode_on = 0; }
 int  fips_mode_active(void)  { return fips_mode_on; }
 

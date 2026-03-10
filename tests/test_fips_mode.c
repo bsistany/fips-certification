@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "fips.h"
+#include "self_test.h"
 
 static int tests_run    = 0;
 static int tests_passed = 0;
@@ -51,8 +52,8 @@ int main(void) {
     check_int("MD5 blocked (no KATs)", fips_check_algorithm(ALG_MD5),         FIPS_ERR_SELF_TEST);
 
     /* --- FIPS mode on, self-tests passed ---------------------------- */
-    fips_set_self_test_passed(1);
-    check_str("Status is approved",          fips_mode_status(), "approved");
+    fips_self_test_run();
+    check_str("Status is approved after KATs",  fips_mode_status(), "approved");
 
     /* Approved algorithms allowed */
     check_int("AES-128-CBC approved",   fips_check_algorithm(ALG_AES_128_CBC),   FIPS_OK);

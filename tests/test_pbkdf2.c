@@ -8,6 +8,7 @@
 #include <string.h>
 #include "pbkdf2.h"
 #include "fips.h"
+#include "self_test.h"
 
 static int tests_run    = 0;
 static int tests_passed = 0;
@@ -98,7 +99,7 @@ static void test_rfc6070_tc5(void) {
 /* FIPS mode: reject short salt */
 static void test_fips_short_salt(void) {
     fips_mode_enable();
-    fips_set_self_test_passed(1);
+    fips_self_test_run();
     uint8_t out[32];
     int rc = pbkdf2_hmac_sha256(
         (const uint8_t *)"password", 8,
@@ -111,7 +112,7 @@ static void test_fips_short_salt(void) {
 /* FIPS mode: reject low iteration count */
 static void test_fips_low_iterations(void) {
     fips_mode_enable();
-    fips_set_self_test_passed(1);
+    fips_self_test_run();
     uint8_t out[32];
     uint8_t salt[16] = {0};
     int rc = pbkdf2_hmac_sha256(
