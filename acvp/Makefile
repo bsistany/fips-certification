@@ -22,6 +22,7 @@
 # ---------------------------------------------------------------------------
 CC     = gcc
 CFLAGS = -Wall -Wextra -std=c99
+PYTHON = ../.venv/bin/python3
 
 # Include paths:
 #   -I../include   : project headers (aes.h, sha256.h, hmac.h, pbkdf2.h, ...)
@@ -86,9 +87,9 @@ $(RUNNER_BIN): $(RUNNER_SRC) $(SRC_OBJS)
 # Dependency check
 # ---------------------------------------------------------------------------
 check-deps:
-	@command -v python3 >/dev/null 2>&1 || \
-	    { echo "ERROR: python3 not found"; exit 1; }
-	@python3 -c "import cryptography" 2>/dev/null || \
+	@command -v $(PYTHON) >/dev/null 2>&1 || \
+	    { echo "ERROR: python not found"; exit 1; }
+	@$(PYTHON) -c "import cryptography" 2>/dev/null || \
 	    { echo "ERROR: Python 'cryptography' package not found."; \
 	      echo "       Install with: pip install cryptography"; exit 1; }
 	@pkg-config --exists libcjson || \
@@ -100,7 +101,7 @@ check-deps:
 acvp-test: all
 	@echo ""
 	@echo "=== Stage 1: Generating ACVP request vectors ==="
-	python3 $(SCRIPTS_DIR)/generate_vectors.py
+	$(PYTHON) $(SCRIPTS_DIR)/generate_vectors.py
 
 	@echo ""
 	@echo "=== Stage 2: Running acvp_runner ==="
@@ -111,7 +112,7 @@ acvp-test: all
 
 	@echo ""
 	@echo "=== Stage 3: Validating responses ==="
-	python3 $(SCRIPTS_DIR)/validate_responses.py
+	$(PYTHON) $(SCRIPTS_DIR)/validate_responses.py
 
 # ---------------------------------------------------------------------------
 # Clean

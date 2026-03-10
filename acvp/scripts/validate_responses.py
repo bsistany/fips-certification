@@ -28,11 +28,14 @@ def validate():
         with open(req_path) as f: req = json.load(f)
         with open(res_path) as f: res = json.load(f)
 
-        # Map tcId to expected value
+        # Map (tgId, tcId) to expected value.
+        # Keying on tcId alone is incorrect — AES and HMAC have multiple
+        # testGroups each starting at tcId=1, causing later groups to
+        # overwrite earlier ones in the map.
         expected_map = {}
         for g in req["testGroups"]:
             for t in g["tests"]:
-                expected_map[t["tcId"]] = t["expected"].lower()
+                expected_map[(g["tgId"], t["tcId"])] = t["expected"].lower()
 
         passed_count = 0
         algo_total = 0
@@ -40,7 +43,7 @@ def validate():
         for g in res["testGroups"]:
             for t in g["tests"]:
                 algo_total += 1
-                if t["output"].lower() == expected_map.get(t["tcId"]):
+                if t["output"].lower() == expected_map.get((g["tgId"], t["tcId"])):
                     passed_count += 1
         
         results[name] = (passed_count, algo_total)

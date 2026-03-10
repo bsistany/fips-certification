@@ -12,3 +12,6 @@ tests/test_pbkdf2
 # ACVP — generated at runtime, not committed
 acvp/request/*.json
 acvp/response/*.json
+
+# python virtual env
+.venv/
