@@ -96,11 +96,7 @@ This runs:
 
 ## Development Tools
 
-Claude (Anthropic) assisted with architecture design, code generation, and
-sprint planning. Gemini (Google) generated the ACVP validation scripts
-(`generate_vectors.py`, `validate_responses.py`) as an independent validation
-layer. All design decisions, code review, integration, and testing were
-performed by the author.
+The project concept and overall design originated with the author. As part of the experimental approach, two different AI systems were deliberately used to separate implementation and validation concerns. Claude (Anthropic) assisted with architecture exploration, code generation, and sprint planning. Gemini (Google) independently generated ACVP-style validation scripts (`generate_vectors.py`, `validate_responses.py`) used to test the implementation. The author performed all design decisions, code review, integration, and final testing.
 
 ---
 
