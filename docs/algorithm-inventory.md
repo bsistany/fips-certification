@@ -143,11 +143,18 @@ submission. The table below tracks validation status for this module.
 | HMAC-SHA-256 | ACVP-HMAC-SHA2-256 | 12 | ✅ Sprint 8 — `acvp/request/hmac_sha256.json` | ⬜ Sprint 9 |
 | PBKDF2-HMAC-SHA-256 | ACVP-KDF-PBKDF2 | 12 | ✅ Sprint 8 — `acvp/request/pbkdf2.json` | ⬜ Sprint 9 |
 
-> ACVP local simulation uses Python's `cryptography` library as the trusted
-> reference (Stage 1), the C library as the implementation under test (Stage 2),
-> and an independent Python validator for result checking (Stage 3). All 43
-> vectors passed. Run `make acvp-test` to reproduce.
+> **Validation pipeline:** Python `cryptography` lib (Stage 1, reference) →
+> C library under test (Stage 2) → independent Python validator (Stage 3).
+> All 43 vectors passed. Run `make acvp-test` to reproduce.
 >
-> For a real CMVP submission each algorithm must be tested against NIST's ACVP
-> server (`demo.acvts.nist.gov`) and receive a certificate number. Demo server
-> registration and submission is planned for Sprint 9.
+> **What "Local Simulation" means:** The C library output was compared against
+> Python's `cryptography` library, which is built on OpenSSL/BoringSSL (both
+> CAVP-certified). Agreement is good evidence of correctness but is not
+> equivalent to a NIST ACVP certificate. The validation confidence chain is:
+> local simulation (Sprint 8) → demo server submission (Sprint 9) →
+> CMVP certificate (requires accredited lab).
+>
+> **What local simulation proves:** algorithm logic is correct, ACVP JSON
+> handling is correct. What it does not prove: timing-attack resistance,
+> guaranteed zeroization, or absence of memory safety bugs. See
+> `docs/security-policy.md` B.2.10 for the full breakdown.

@@ -349,14 +349,51 @@ development-time validation activity, not a runtime check.
 | HMAC-SHA-256 | ACVP-HMAC-SHA2-256 | 12 (3 keyLen/macLen groups) | ✅ 12/12 passed |
 | PBKDF2-HMAC-SHA-256 | ACVP-KDF-PBKDF2 | 12 (3 key lengths, iterationCount=10000) | ✅ 12/12 passed |
 
-Test vectors were generated using Python's `cryptography` library as the
-trusted reference. The C library output was independently validated by a
-separate Python script. The pipeline is fully reproducible via `make acvp-test`.
-See `docs/acvp_validation_prompt.md` for the complete design record.
+The pipeline is fully reproducible via `make acvp-test`. See
+`docs/acvp_validation_prompt.md` for the complete design record.
 
 This testing was conducted under the CAVP program using the ACVP protocol
 (local simulation). Submission to NIST's ACVP demo server (`demo.acvts.nist.gov`)
 is planned for Sprint 9.
+
+### Validation Methodology and Ground Truth Chain
+
+Understanding what this validation proves — and what it does not — is important
+for interpreting the results correctly.
+
+**Why Python's `cryptography` library is the reference**
+
+The `cryptography` library was chosen as the ground truth reference because it
+is built on OpenSSL and BoringSSL, both of which hold actual CAVP certificates
+from NIST. It implements the same NIST standards (FIPS 197, FIPS 180-4,
+FIPS 198-1, SP 800-132) that this module targets, and it is independently
+audited and widely deployed. Agreement with this library is therefore meaningful
+evidence of algorithmic correctness — not an arbitrary comparison.
+
+**The ground truth chain**
+
+Validation confidence increases at each level:
+
+| Level | Method | Strength |
+|---|---|---|
+| 1 | Agreement with Python `cryptography` lib | Good — reference has CAVP lineage |
+| 2 | Agreement with NIST ACVP demo server | Stronger — NIST-authoritative expected values |
+| 3 | CMVP certificate from accredited lab | Definitive — requires CSTL review |
+
+Sprint 8 achieves Level 1. Sprint 9 targets Level 2. Level 3 requires an
+accredited Cryptographic Security Testing Laboratory (CSTL) and is beyond
+the scope of this learning project.
+
+**What local simulation proves**
+
+| Claim | Supported by Sprint 8 |
+|---|---|
+| Algorithm logic is correct | ✅ Yes — outputs match trusted reference |
+| ACVP JSON schema handling is correct | ✅ Yes — pipeline produces valid ACVP-format JSON |
+| Implementation is timing-attack resistant | ❌ No — not tested here (Gap #12) |
+| Zeroization is guaranteed by compiler | ❌ No — memset not guaranteed (Gap #6) |
+| Module binary has not been tampered with | ❌ No — no integrity test (Gap #1) |
+| Module holds a CAVP certificate | ❌ No — requires demo server + CSTL |
 
 ---
 

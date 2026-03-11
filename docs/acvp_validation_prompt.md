@@ -414,3 +414,69 @@ Decisions made prior to this prompt that must be respected:
 | Python harness split | Two separate scripts | Stage 1 and Stage 3 are independently ownable |
 | cJSON (C runner) | Homebrew install | Not your concern — C runner only |
 | Build system | Separate `acvp/Makefile` | Not your concern — C runner only |
+
+---
+
+## Validation Methodology and Ground Truth Chain
+
+This section documents the epistemological basis of the local simulation —
+what it proves, what it does not prove, and how it relates to the broader
+CAVP validation process.
+
+### Why Python's `cryptography` library is the reference
+
+The `cryptography` library was chosen as the ground truth reference for the
+following reasons:
+
+- It is built on OpenSSL and BoringSSL, both of which hold actual CAVP
+  certificates issued by NIST
+- It implements the same NIST standards this module targets: FIPS 197,
+  FIPS 180-4, FIPS 198-1, SP 800-132
+- It is independently audited, widely deployed, and maintained by a
+  dedicated security team
+- It is not affiliated with this project — its independence from the C
+  implementation under test is what makes the comparison meaningful
+
+Agreement between the C library and the `cryptography` library is therefore
+meaningful evidence of algorithmic correctness, not an arbitrary comparison
+against an unvetted reference.
+
+### The ground truth chain
+
+Validation confidence increases at each level of the following chain. This
+project currently sits at Level 1; Sprint 9 targets Level 2.
+
+| Level | Method | Who holds the expected values | Strength |
+|---|---|---|---|
+| 1 | Local simulation | Python `cryptography` lib (CAVP lineage) | Good |
+| 2 | NIST ACVP demo server | NIST | Stronger — authoritative |
+| 3 | CMVP certificate | Accredited CSTL + NIST | Definitive |
+
+Level 3 requires an accredited Cryptographic Security Testing Laboratory
+(CSTL) and is beyond the scope of this learning project.
+
+### What local simulation proves and does not prove
+
+| Claim | Supported by local simulation |
+|---|---|
+| Algorithm logic produces correct outputs | ✅ Yes |
+| ACVP JSON schema is correctly implemented | ✅ Yes |
+| C library agrees with a CAVP-lineage reference | ✅ Yes |
+| Implementation is timing-attack resistant | ❌ No — not tested here |
+| Zeroization is guaranteed by the compiler | ❌ No — memset not guaranteed |
+| Module binary integrity is verified at runtime | ❌ No — no integrity test |
+| Module holds a CAVP certificate | ❌ No — requires demo server + CSTL |
+
+### Independence as a design principle
+
+The validation infrastructure was deliberately authored by a different AI
+(Gemini) from the one that authored the C implementation (Claude). This
+establishes a separation between the implementation under test and the
+validation layer — analogous to the independence requirement between a
+module vendor and a CSTL in the real CMVP process.
+
+A bug in Gemini's `validate_responses.py` (incorrect `tcId`-only lookup
+across multiple testGroups) was caught during integration because the runner
+and validator disagreed (43/43 vs 31/43). This disagreement is exactly what
+the two-layer checking was designed to surface. The bug was corrected by the
+author before the Sprint 8 commit.
