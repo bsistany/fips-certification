@@ -15,3 +15,11 @@ acvp/response/*.json
 
 # python virtual env
 .venv/
+
+.acvp-credentials/
+.acvp_token
+
+*.key
+*.crt
+*.pem
+
