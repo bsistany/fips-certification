@@ -2,7 +2,7 @@
 
 A minimal cryptographic library written in ANSI C, built from first principles with FIPS 140-3 constraints in mind.
 
-This is a learning project. Every primitive is implemented from scratch — no external crypto dependencies. The goal is to understand what FIPS 140-3 actually requires by building something that could plausibly go through certification.
+This project explores the FIPS 140-3 validation process by building a minimal cryptographic module and simulating the steps required for certification. Every primitive is implemented from scratch — no external crypto dependencies. The goal is to understand what FIPS 140-3 actually requires by building something that could plausibly go through certification.
 
 > **Not for production use.** This library is for educational purposes only.
 
