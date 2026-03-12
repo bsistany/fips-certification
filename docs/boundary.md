@@ -167,6 +167,68 @@ to a CMVP lab.
 
 ---
 
+## 8. Automated Boundary Analysis
+
+### Design rationale
+
+Most FIPS 140-3 security policies describe the module boundary statically
+in prose — listing which source files are inside and outside the boundary
+and enumerating external dependencies by hand. This approach has a
+significant weakness: as the codebase evolves, the boundary documentation
+can drift from reality. A new external dependency introduced in a `.c` file
+may go undocumented, and a manual review may not catch it.
+
+This project takes a different approach. The boundary is derived
+programmatically from the compiled object files using the standard Unix
+symbol table tool `nm`. The script `tools/analyze_boundary.py` runs `nm`
+on every `.o` file in `src/` and classifies every symbol into one of four
+categories that map directly to FIPS 140-3 §7.6:
+
+| nm symbol type | FIPS category | Meaning |
+|---|---|---|
+| `T` (uppercase) | Public API | Exported function — a formal module interface |
+| `t`, `s`, `d`, `b` (lowercase) | Internal symbol | Private function or static data — inside boundary, not exposed |
+| `U` resolved internally | Internal dependency | Call between our own modules — inside boundary |
+| `U` unresolved externally | External dependency | Resolved outside the boundary — must be documented as an environmental assumption |
+
+### Why this matters for FIPS
+
+FIPS 140-3 §7.6 requires that all interfaces through which data, control,
+and status information cross the module boundary be explicitly documented.
+The external dependencies section of this analysis is the machine-generated
+equivalent of that requirement — it enumerates every symbol the module
+resolves from outside its own boundary.
+
+Critically, this output is **generated from compiled artifacts, not from
+source code reading or manual inspection**. This means:
+
+- It catches symbols introduced by the compiler (e.g. `__stack_chk_fail`
+  for stack smashing protection) that would be invisible in a source-only
+  review
+- It stays accurate as the code changes — rerunning `make analyse-boundary`
+  after any modification produces an updated report
+- It provides objective evidence for a CSTL reviewer rather than a
+  manually maintained list that could be incomplete or stale
+
+### macOS vs Linux note
+
+On macOS, the C compiler prefixes all C symbols with an underscore (`_`).
+The script strips this prefix before classification so output is consistent
+across platforms. The four external dependencies (`memcmp`, `memcpy`,
+`memset`, `__stack_chk_fail`) appear identically on both macOS and Linux.
+
+### Reproducing the output
+
+```bash
+make compile              # ensure .o files are current
+make analyse-boundary     # runs tools/analyze_boundary.py
+```
+
+The output below was produced by running this command against the current
+codebase. If the output differs after a code change, the boundary
+documentation in this file and in `docs/security-policy.md` B.2.3 must
+be reviewed and updated accordingly.
+
 ## Appendix A — Generated Boundary Analysis
 
 The following output was produced by running `make analyse-boundary`.

@@ -347,6 +347,21 @@ All four approved algorithms have been validated against Python's
 ACVP-format JSON vectors. 43/43 vectors pass. The pipeline is reproducible
 via `make acvp-test`. Demo server submission is planned for Sprint 9.
 
+### Automated boundary analysis
+
+The module boundary is derived programmatically rather than maintained
+manually. `tools/analyze_boundary.py` runs the standard Unix `nm` tool
+against every compiled object file in `src/` and classifies each symbol
+into one of four FIPS 140-3 §7.6 categories: public API, internal symbols,
+internal dependencies, and external dependencies.
+
+This approach ensures the boundary documentation stays accurate as the
+code evolves — external dependencies introduced by new code or by the
+compiler (such as `__stack_chk_fail` for stack smashing protection) are
+caught automatically rather than requiring manual inspection. The output
+is reproducible via `make analyse-boundary` and is recorded in
+`docs/boundary.md` Appendix A.
+
 ### Security policy
 
 The module's non-proprietary security policy (`docs/security-policy.md`)

@@ -2,21 +2,47 @@
 """
 analyze_boundary.py — Cryptographic Module Boundary Analyzer
 
-Runs nm on all compiled object files in src/ and classifies every symbol
-to produce a formal boundary definition report.
+Derives the FIPS 140-3 module boundary programmatically from compiled
+object files using nm, rather than maintaining a static manual list.
 
-Usage:
+Rationale
+---------
+FIPS 140-3 §7.6 requires all interfaces through which data, control, and
+status information cross the module boundary to be explicitly documented.
+Most implementations document this by hand — listing source files and
+external dependencies in prose. That approach drifts as the codebase
+evolves: new external dependencies can be introduced without updating the
+documentation, and compiler-injected symbols (e.g. __stack_chk_fail for
+stack smashing protection) are invisible in a source-only review.
+
+This script derives the boundary directly from the compiled artifacts.
+Every symbol in every .o file is classified by its nm type:
+
+    T (uppercase) → Public API: exported function, formal module interface
+    t/s/d/b       → Internal symbol: private — inside boundary, not exposed
+    U (internal)  → Internal dependency: call between our own modules
+    U (external)  → External dependency: resolved outside boundary —
+                    must be documented as an environmental assumption per
+                    FIPS 140-3 §7.6
+
+The external dependencies section of the output is the machine-generated
+equivalent of the environmental assumptions table in the security policy.
+It is objective, reproducible, and stays accurate as the code changes.
+
+Usage
+-----
     python3 tools/analyze_boundary.py
 
 Must be run from the repo root after `make compile`.
+Output is recorded in docs/boundary.md Appendix A.
 
-Output sections:
-    1. Public API          — T symbols: exported functions (module interfaces)
-    2. Internal Symbols    — t/s symbols: private functions and data
-    3. Internal Deps       — U symbols resolved within our own object files
-    4. External Deps       — U symbols resolved outside (operational environment)
+Platform note
+-------------
+On macOS, the C compiler prefixes all C symbols with an underscore (_).
+This script strips that prefix before classification so output is
+consistent across macOS and Linux.
 
-Reference: FIPS 140-3 Section 7.6 (Interfaces)
+Reference: FIPS 140-3 §7.6 (Interfaces), docs/boundary.md Section 8
 """
 
 import subprocess
