@@ -17,6 +17,11 @@ why it exists, how the CMVP and CAVP processes work end to end, what this
 project implements, and how each sprint maps to a real certification
 requirement. Includes glossary and references.
 
+**[CMVP Certification Process](cmvp-process.md)**  
+A visual overview of the full certification path from implementation to
+CAVP certificate, with this project's completed and in-progress steps
+highlighted. Useful orientation before reading the core FIPS documents.
+
 ---
 
 ## Core FIPS Documents
@@ -27,6 +32,7 @@ artifacts a CSTL would review in a real CMVP engagement.
 
 | Document | Description |
 |---|---|
+| [CMVP Certification Process](cmvp-process.md) | Visual diagram of the full certification path from implementation to CAVP certificate. Shows where this project sits relative to vendor, CST lab, and CMVP phases, with completed and in-progress steps highlighted. |
 | [Security Policy](security-policy.md) | Non-proprietary security policy structured to SP 800-140Br1 Annex B (B.2.1–B.2.12). Covers roles, services, algorithms, self-tests, key management, and 12 documented known gaps. |
 | [Algorithm Inventory](algorithm-inventory.md) | Complete inventory of approved, allowed, and non-approved algorithms. Includes ACVP validation status table and CAVP coverage tracking. |
 | [Module Boundary](boundary.md) | Precise definition of the cryptographic module boundary — what is inside, what is outside, all external dependencies, CSPs, and generated boundary analysis output. |
@@ -53,12 +59,13 @@ For a first-time reader working through the project end to end:
 
 ```
 1. how-fips-validation-works.md     ← understand the landscape
-2. security-policy.md               ← the core FIPS document
-3. algorithm-inventory.md           ← what is implemented and validated
-4. boundary.md                      ← where the module boundary sits
-5. acvp_validation_prompt.md        ← how the ACVP pipeline was designed
-6. acvp/integration.md              ← how ACVP client-server works
-7. acvp/credentials.md              ← how to set up for Sprint 9
+2. cmvp-process.md                  ← see where this project fits visually
+3. security-policy.md               ← the core FIPS document
+4. algorithm-inventory.md           ← what is implemented and validated
+5. boundary.md                      ← where the module boundary sits
+6. acvp_validation_prompt.md        ← how the ACVP pipeline was designed
+7. acvp/integration.md              ← how ACVP client-server works
+8. acvp/credentials.md              ← how to set up for Sprint 9
 ```
 
 ---
@@ -79,6 +86,7 @@ For a first-time reader working through the project end to end:
 | Document | Status | Last updated |
 |---|---|---|
 | `how-fips-validation-works.md` | ✅ Current | Sprint 8 |
+| `cmvp-process.md` | ✅ Current | Sprint 8 |
 | `security-policy.md` | ✅ Current | Sprint 8 |
 | `algorithm-inventory.md` | ✅ Current | Sprint 8 |
 | `boundary.md` | ✅ Current | Sprint 7 |
