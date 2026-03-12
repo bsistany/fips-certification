@@ -453,7 +453,7 @@ project currently sits at Level 1; Sprint 9 targets Level 2.
 | 3 | CMVP certificate | Accredited CSTL + NIST | Definitive |
 
 Level 3 requires an accredited Cryptographic Security Testing Laboratory
-(CSTL) and is beyond the scope of this learning project.
+(CSTL) and is beyond the scope of this project.
 
 ### What local simulation proves and does not prove
 

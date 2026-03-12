@@ -4,7 +4,7 @@
 **Version:** 1.0.0  
 **Security Level:** 1  
 **Standard:** FIPS 140-3 / ISO/IEC 19790:2012  
-**Document status:** Draft — learning project, not a real CMVP submission  
+**Document status:** Draft — This is a reference implementation, not a real CMVP submission  
 
 > This document follows the section order required by SP 800-140Br1 and
 > ISO/IEC 19790:2012 Annex B (B.2.1 through B.2.12). In a real submission
@@ -382,7 +382,7 @@ Validation confidence increases at each level:
 
 Sprint 8 achieves Level 1. Sprint 9 targets Level 2. Level 3 requires an
 accredited Cryptographic Security Testing Laboratory (CSTL) and is beyond
-the scope of this learning project.
+the scope of this project.
 
 **What local simulation proves**
 

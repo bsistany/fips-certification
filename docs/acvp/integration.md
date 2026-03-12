@@ -79,7 +79,7 @@ Certificate number used in CMVP submission
 ```
 
 This project completes the first two steps. The remaining steps require
-an accredited lab and are beyond the scope of this learning project.
+an accredited lab and are beyond the scope of this reference implementation.
 
 ---
 

@@ -89,8 +89,7 @@ Send an email to the ACVP team requesting access to the demo server:
 
 **To:** acvp@nist.gov  
 **Subject:** ACVTS Demo Server Access Request  
-**Body:** Include your name, organisation (or "independent researcher /
-learning project"), and intended use (algorithm validation testing).
+**Body:** Include your name, organisation (or "independent researcher"), and intended use (algorithm validation testing).
 
 NIST will reply with instructions and a registration link. Response times
 vary — allow 3–10 business days.

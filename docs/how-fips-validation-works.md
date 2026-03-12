@@ -296,8 +296,9 @@ full process (CSTL testing + NIST review) takes 12–24 months.
 
 ## 6. What This Project Implements
 
-This project is a learning implementation of a FIPS 140-3 Security Level 1
-software cryptographic module. It implements the components of the CMVP
+This project is a reference implementation of a FIPS 140-3 Security Level 1
+software cryptographic module, built to develop hands-on depth in FIPS 140-3
+certification requirements. It implements the components of the CMVP
 process that can be meaningfully explored without an accredited lab.
 
 ### Cryptographic boundary
@@ -376,7 +377,7 @@ Being precise about limitations is as important as documenting capabilities.
 
 | Claim | Reality |
 |---|---|
-| This is a production cryptographic library | It is not. It is a learning project. Do not use it to protect real data. |
+| This is a production cryptographic library | It is not. It is a reference implementation. Do not use it to protect real data. |
 | This module is FIPS 140-3 certified | It is not. No CSTL has tested it. No NIST certificate has been issued. |
 | This module has CAVP certificates | It does not. ACVP local simulation is not equivalent to a CAVP certificate. |
 | The self-tests meet FIPS 140-3 §10.3.1 | Partially. The software integrity test (HMAC over the binary) is not implemented (Gap #1). |
@@ -384,7 +385,7 @@ Being precise about limitations is as important as documenting capabilities.
 | The implementation is timing-attack resistant | It is not. AES table lookups and MAC comparison are not constant-time (Gap #12). |
 | A DRBG is implemented | It is not. Keys must be supplied by the caller (Gap #2). |
 
-These gaps are intentional limitations of a learning project, not oversights.
+These gaps are intentional limitations of a reference implementation for FIPS 140-3 exploration, not oversights.
 They are fully documented in `docs/security-policy.md` Appendix B.
 
 ---
@@ -414,7 +415,7 @@ explicit.
 
 ## 9. What Would Be Needed to Go Further
 
-The following work would be required to move from this learning project
+The following work would be required to move from this reference implementation
 toward a real CMVP submission:
 
 ### Technical gaps to close
@@ -440,12 +441,13 @@ toward a real CMVP submission:
 
 ### The honest gap
 
-The architectural and documentary foundation this project establishes is
-the same foundation a real submission would build on. The security policy
-structure, boundary definition, algorithm inventory, and ACVP pipeline are
-all aligned with what a CSTL would expect to see. What is missing is the
-accredited lab engagement and the production ACVP submission — both of which
-require resources beyond a learning project.
+The architectural and documentary foundation this reference implementation
+establishes is the same foundation a real submission would build on. The
+security policy structure, boundary definition, algorithm inventory, and
+ACVP pipeline are all aligned with what a CSTL would expect to see. What
+is missing is the accredited lab engagement and the production ACVP
+submission — both of which require resources beyond an individual
+exploration project.
 
 ---
 
