@@ -275,3 +275,7 @@ SUMMARY
   Internal dependencies  : 11
   External dependencies  : 4
 ```
+
+---
+
+**Navigation:** [Documentation Index](README.md) · Previous: [Algorithm Inventory](algorithm-inventory.md) · Next: [ACVP Validation Design Record](acvp_validation_prompt.md)

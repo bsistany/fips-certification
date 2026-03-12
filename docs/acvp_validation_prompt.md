@@ -480,3 +480,7 @@ across multiple testGroups) was caught during integration because the runner
 and validator disagreed (43/43 vs 31/43). This disagreement is exactly what
 the two-layer checking was designed to surface. The bug was corrected by the
 author before the Sprint 8 commit.
+
+---
+
+**Navigation:** [Documentation Index](README.md) · Previous: [Module Boundary](boundary.md) · Next: [ACVP Integration Workflow](acvp/integration.md)

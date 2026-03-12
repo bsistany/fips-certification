@@ -367,3 +367,7 @@ python3 acvp/scripts/acvp_compare.py
 | ACVTS Demo Server | https://demo.acvts.nist.gov |
 | SP 800-140Br1 | https://csrc.nist.gov/publications/detail/sp/800/140b/r1/final |
 | ACVP Server Specification (draft) | https://github.com/usnistgov/ACVP-Server |
+
+---
+
+**Navigation:** [Documentation Index](../README.md) · Previous: [ACVP Validation Design Record](../acvp_validation_prompt.md) · Next: [ACVP Credentials Setup](credentials.md)

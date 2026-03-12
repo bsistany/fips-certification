@@ -158,3 +158,7 @@ submission. The table below tracks validation status for this module.
 > handling is correct. What it does not prove: timing-attack resistance,
 > guaranteed zeroization, or absence of memory safety bugs. See
 > `docs/security-policy.md` B.2.10 for the full breakdown.
+
+---
+
+**Navigation:** [Documentation Index](README.md) · Previous: [Security Policy](security-policy.md) · Next: [Module Boundary](boundary.md)
