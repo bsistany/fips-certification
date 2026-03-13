@@ -5,6 +5,7 @@
 **Security Level:** 1  
 **Standard:** FIPS 140-3 / ISO/IEC 19790:2012  
 **Document status:** Draft — This is a reference implementation, not a real CMVP submission  
+**Last updated:** Per-area security level table added to B.2.1; Gap #13 identified and resolved  
 
 > This document follows the section order required by SP 800-140Br1 and
 > ISO/IEC 19790:2012 Annex B (B.2.1 through B.2.12). In a real submission
@@ -24,15 +25,33 @@ The module is a software module operating at Security Level 1. It has no
 physical security mechanisms and makes no assumptions about the physical
 security of the platform on which it runs.
 
+### Module Identification
+
 | Field | Value |
 |---|---|
 | Module name | fips-crypto |
 | Version | 1.0.0 |
 | Module type | Software |
-| Security level | 1 |
 | Validation standard | FIPS 140-3 / ISO/IEC 19790:2012 |
 | Language | ANSI C (C99) |
 | Tested platforms | macOS 14 (Apple clang 17.0.0, x86_64), Linux (gcc, x86_64) |
+
+### Security Level by Requirement Area
+
+| Requirement area | Level | Notes |
+|---|---|---|
+| 1. Cryptographic module specification | 1 | Logical boundary defined in B.2.2 and `docs/boundary.md` |
+| 2. Cryptographic module interfaces | 1 | Public API documented in B.2.3 and `docs/boundary.md` |
+| 3. Roles, services, and authentication | 1 | Crypto Officer and User roles; no authentication required at Level 1 |
+| 4. Software/firmware security | 1 | No software integrity test; not required at Level 1 — see Gap #1 |
+| 5. Operational environment | 1 | Modifiable OS; macOS 14 and Linux tested — see B.2.5 |
+| 6. Physical security | 1 (N/A) | Software module; no physical embodiment |
+| 7. Non-invasive security | 1 (N/A) | Software module; no side-channel claims — see B.2.8 |
+| 8. Sensitive security parameter management | 1 | SSPs identified and documented in B.2.9 — see Gap #7 |
+| 9. Self-tests | 1 | KATs at power-on for all algorithms — see B.2.10; see Gap #1 |
+| 10. Life-cycle assurance | 1 | GitHub CM in place — see B.2.11; see Gaps #10, #11 |
+| 11. Mitigation of other attacks | 1 (N/A) | No mitigation claims made — see B.2.12; see Gap #12 |
+| **Overall** | **1** | Minimum across all requirement areas |
 
 ---
 
@@ -503,6 +522,7 @@ The following gaps would need to be resolved before a real CMVP submission.
 | 10 | No formal CM plan | B.2.11 | GitHub without branch protection does not meet CM requirements | FIPS 140-3 §7.11 |
 | 11 | No formal delivery/guidance documents | B.2.11 | No secure installation or initialisation procedures | FIPS 140-3 §7.11 |
 | 12 | No timing attack mitigations | B.2.12 | AES table lookups and HMAC comparison are not constant-time | Practical concern |
+| 13 | No per-area security level breakdown in B.2.1 | B.2.1 | Overall level claim present but per-requirement-area table was missing — resolved in this revision | SP 800-140Br1 B.2.1 |
 
 ---
 
