@@ -130,55 +130,51 @@
 
 ---
 
-## Sprint 8 — ACVP Simulation (Local) ✅
-**Goal:** Simulate CAVP algorithm validation locally using ACVP-format JSON
-vectors fed to the C library via a C runner binary. Produce ACVP-format
-response JSON and validate output against an independent Python reference.
-
-**Pipeline (three stages):**
-- Stage 1 — `generate_vectors.py`: generates ACVP-format request JSON using
-  Python `cryptography` lib as trusted reference
-- Stage 2 — `acvp_runner`: C binary reads request JSON, calls the library,
-  writes ACVP-format response JSON
-- Stage 3 — `validate_responses.py`: independently compares C output against
-  Python reference; does not trust runner's own `"passed"` field
+## Sprint 8 — CAVP Simulation ⬜
+**Goal:** Simulate CAVP algorithm validation using ACVP-format test vectors fed to the actual C library. Produce results in ACVP response format for each approved algorithm.
 
 **Deliverables:**
-- `acvp/src/acvp_runner.c` — single binary dispatching on `"algorithm"` field
-- `acvp/Makefile` — builds runner; `make acvp-test` drives full pipeline
-- `acvp/scripts/generate_vectors.py` — Stage 1 (Gemini)
-- `acvp/scripts/validate_responses.py` — Stage 3 (Gemini; bug fixed by author)
-- `acvp/request/*.json` — runtime-generated, gitignored
-- `acvp/response/*.json` — runtime-generated, gitignored
-- `docs/acvp_validation_prompt.md` — design record and Gemini prompt
-- `LICENSE`, `CONTRIBUTORS.md`, `SECURITY.md` — repo hygiene
-- Updated: `README.md`, `docs/algorithm-inventory.md`, `docs/security-policy.md`
+- `cavp/aes/vectors.json` + `cavp/aes/results.json`
+- `cavp/sha256/vectors.json` + `cavp/sha256/results.json`
+- `cavp/hmac/vectors.json` + `cavp/hmac/results.json`
+- `cavp/pbkdf2/vectors.json` + `cavp/pbkdf2/results.json`
+- `cavp/run_all.py` — harness that drives the C library via subprocess
 
-**Results:** 43/43 ACVP vectors passing (8 AES-CBC, 11 SHA-256, 12 HMAC-SHA-256, 12 PBKDF2)
-
-**Design decisions:**
-- ACVP = protocol (files, targets, code); CAVP = program (policy docs)
-- `"expected"` embedded in request JSON — local simulation convention only;
-  to be stripped before Sprint 9 demo server submission
-- Validation scripts authored by Gemini for independence from C implementation;
-  validator bug (tcId-only lookup across multiple testGroups) caught during
-  integration and corrected
-- AFT only; MCT deferred
-- No TLS, no server registration — Sprint 9
-
-**Reference:** NIST ACVP, SP 800-140Br1
+**Reference:** NIST ACVP, SP 800-140B
 
 ---
 
 ## Sprint 9 — ACVP Demo Server Submission ⬜
-**Goal:** Register with NIST's ACVP demo server (`demo.acvts.nist.gov`) and
-replay the Sprint 8 local simulation as a real ACVP exchange.
+**Goal:** Submit all four approved algorithms to the NIST ACVTS demo server and achieve `"approved"` disposition for each vector set.
 
-**Planned deliverables:**
-- ACVP client configuration and TLS credentials
-- Strip `"expected"` from request JSON before submission
-- Submit vectors to demo server; retrieve official response
-- Compare demo server results against local simulation results
-- Document any discrepancies
+**Deliverables:**
+- `acvp/scripts/acvp_login.py` — Phase 1: login, write JWT token
+- `acvp/scripts/acvp_register.py` — Phase 2–3: register capabilities, retrieve vector sets
+- `acvp/scripts/acvp_submit.py` — Phase 5–6: submit responses, retrieve disposition
+- `acvp/scripts/acvp_compare.py` — diff server vectors vs local simulation vectors
+- `acvp/config/capabilities.json` — algorithm capabilities registration payload
+- `docs/acvp/credentials.md` updated with actual NIST process
 
-**Reference:** NIST ACVTS, SP 800-140Br1
+**Reference:** NIST ACVTS demo server, ACVP protocol
+
+---
+
+## Sprint 10 — Docker + SAST ⬜
+**Goal:** Containerise the full development environment for reproducibility,
+CI/CD readiness, and host isolation. Add Semgrep for SAST and secrets scanning.
+
+**Deliverables:**
+- `Dockerfile` — single Ubuntu 24.04 image: gcc, make, libcjson, Python, semgrep
+- `.dockerignore` — excludes credentials and build artifacts from build context
+- `.semgrep.yml` — SAST rules (unsafe functions, non-approved algorithms) + secrets rules
+- `Makefile` — new targets: `docker-build`, `docker-test`, `docker-semgrep`, `docker-shell`, `semgrep`
+- `acvp/Makefile` — platform-aware error messages (macOS / Ubuntu / Docker)
+- `docs/docker.md` — how to build, run, and use the container
+
+**FIPS relevance:**
+- Reproducible build environment supports SP 800-140Br1 B.2.11 lifecycle assurance
+- Semgrep `fips-crypto-memset-zeroize` rule surfaces Gap #6 (zeroization) at every scan
+- Semgrep `fips-crypto-non-approved-*` rules enforce algorithm boundary at code level
+- Secrets scanning ensures CSPs and ACVTS credentials are never accidentally committed
+
+**Reference:** SP 800-140Br1 B.2.11 (Lifecycle Assurance)

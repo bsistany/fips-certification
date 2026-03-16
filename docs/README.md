@@ -17,10 +17,13 @@ why it exists, how the CMVP and CAVP processes work end to end, what this
 project implements, and how each sprint maps to a real certification
 requirement. Includes glossary and references.
 
-**[CMVP Certification Process](cmvp-process.md)**  
-A visual overview of the full certification path from implementation to
-CAVP certificate, with this project's completed and in-progress steps
-highlighted. Useful orientation before reading the core FIPS documents.
+---
+
+## Development Environment
+
+| Document | Description |
+|---|---|
+| [Docker Environment](docker.md) | How to build and use the Docker development environment. Covers `make docker-build`, `make docker-test`, `make docker-semgrep`, `make docker-shell`, Semgrep rules, and credential handling inside the container. |
 
 ---
 
@@ -32,7 +35,6 @@ artifacts a CSTL would review in a real CMVP engagement.
 
 | Document | Description |
 |---|---|
-| [CMVP Certification Process](cmvp-process.md) | Visual diagram of the full certification path from implementation to CAVP certificate. Shows where this project sits relative to vendor, CST lab, and CMVP phases, with completed and in-progress steps highlighted. |
 | [Security Policy](security-policy.md) | Non-proprietary security policy structured to SP 800-140Br1 Annex B (B.2.1–B.2.12). Covers roles, services, algorithms, self-tests, key management, and 12 documented known gaps. |
 | [Algorithm Inventory](algorithm-inventory.md) | Complete inventory of approved, allowed, and non-approved algorithms. Includes ACVP validation status table and CAVP coverage tracking. |
 | [Module Boundary](boundary.md) | Precise definition of the cryptographic module boundary — what is inside, what is outside, all external dependencies, CSPs, and generated boundary analysis output. |
@@ -59,7 +61,7 @@ For a first-time reader working through the project end to end:
 
 ```
 1. how-fips-validation-works.md     ← understand the landscape
-2. cmvp-process.md                  ← see where this project fits visually
+2. docker.md                        ← set up your development environment
 3. security-policy.md               ← the core FIPS document
 4. algorithm-inventory.md           ← what is implemented and validated
 5. boundary.md                      ← where the module boundary sits
@@ -85,14 +87,14 @@ For a first-time reader working through the project end to end:
 
 | Document | Status | Last updated |
 |---|---|---|
-| `how-fips-validation-works.md` | ✅ Current | Sprint 8 |
-| `cmvp-process.md` | ✅ Current | Sprint 8 |
+| `how-fips-validation-works.md` | ✅ Current | Sprint 10 |
+| `docker.md` | ✅ Current | Sprint 10 |
 | `security-policy.md` | ✅ Current | Sprint 8 |
 | `algorithm-inventory.md` | ✅ Current | Sprint 8 |
 | `boundary.md` | ✅ Current | Sprint 7 |
 | `acvp_validation_prompt.md` | ✅ Current | Sprint 8 |
-| `acvp/integration.md` | ✅ Current | Sprint 8 |
-| `acvp/credentials.md` | ✅ Current | Sprint 8 |
+| `acvp/integration.md` | ✅ Current | Sprint 9 |
+| `acvp/credentials.md` | ✅ Current | Sprint 9 |
 
 ---
 

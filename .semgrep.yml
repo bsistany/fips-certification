@@ -1,0 +1,157 @@
+# .semgrep.yml — Semgrep rules for fips-crypto
+#
+# Two rule sets:
+#   1. SAST — C code analysis (unsafe functions, format strings, buffer risks)
+#   2. Secrets — accidental commitment of keys, tokens, seeds
+#
+# Run manually:
+#   make semgrep
+#
+# Run inside Docker:
+#   make docker-semgrep
+#
+# Semgrep OSS — no account required.
+
+rules:
+
+  # -------------------------------------------------------------------------
+  # SAST — C code safety
+  # -------------------------------------------------------------------------
+
+  - id: fips-crypto-unsafe-strcpy
+    patterns:
+      - pattern: strcpy($DST, $SRC)
+    message: >
+      strcpy does not check bounds. Use strncpy or strlcpy with an explicit
+      size limit. In a FIPS module, buffer overflows are a critical security
+      concern.
+    languages: [c]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-120
+
+  - id: fips-crypto-unsafe-sprintf
+    patterns:
+      - pattern: sprintf($BUF, ...)
+    message: >
+      sprintf does not check bounds. Use snprintf with an explicit size limit.
+    languages: [c]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-120
+
+  - id: fips-crypto-unsafe-gets
+    patterns:
+      - pattern: gets($BUF)
+    message: >
+      gets is unsafe and removed from C11. Use fgets with an explicit size.
+    languages: [c]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-120
+
+  - id: fips-crypto-format-string
+    patterns:
+      - pattern: printf($VAR)
+      - pattern: fprintf($FD, $VAR)
+    message: >
+      Passing a non-literal as a format string is a format-string vulnerability.
+      Use printf("%s", $VAR) instead.
+    languages: [c]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: CWE-134
+
+  - id: fips-crypto-memset-zeroize
+    patterns:
+      - pattern: memset($PTR, 0, $SIZE)
+    message: >
+      memset for zeroization may be optimised away by the compiler.
+      Consider explicit_bzero() or memset_s() for CSP zeroization
+      (documented as Gap #6 in docs/security-policy.md).
+    languages: [c]
+    severity: WARNING
+    metadata:
+      category: fips
+      reference: FIPS 140-3 §7.9
+
+  - id: fips-crypto-non-approved-md5
+    patterns:
+      - pattern: MD5(...)
+      - pattern: MD5_Init(...)
+      - pattern: MD5_Update(...)
+      - pattern: MD5_Final(...)
+    message: >
+      MD5 is not an approved algorithm under FIPS 140-3. Use SHA-256 or
+      another approved hash. See docs/algorithm-inventory.md.
+    languages: [c]
+    severity: ERROR
+    metadata:
+      category: fips
+      reference: FIPS 140-3 §7.4
+
+  - id: fips-crypto-non-approved-sha1
+    patterns:
+      - pattern: SHA1(...)
+      - pattern: SHA1_Init(...)
+    message: >
+      SHA-1 is not approved for new applications under FIPS 140-3.
+      Use SHA-256. See docs/algorithm-inventory.md.
+    languages: [c]
+    severity: ERROR
+    metadata:
+      category: fips
+      reference: SP 800-131A Rev 2
+
+  # -------------------------------------------------------------------------
+  # Secrets detection
+  # -------------------------------------------------------------------------
+
+  - id: fips-crypto-hardcoded-key-hex
+    patterns:
+      - pattern-regex: '(?i)(key|secret|token|seed|password)\s*=\s*"[0-9a-fA-F]{32,}"'
+    message: >
+      Possible hardcoded cryptographic key or secret. Keys must never be
+      committed to the repository. Use environment variables or a secrets
+      manager.
+    languages: [c, python, generic]
+    severity: ERROR
+    metadata:
+      category: secrets
+
+  - id: fips-crypto-hardcoded-totp-seed
+    patterns:
+      - pattern-regex: '(?i)(totp|otp)[_\s]*(seed|secret|key)\s*[=:]\s*["\x27][A-Z2-7]{16,}'
+    message: >
+      Possible hardcoded TOTP seed (base32 encoded). TOTP seeds must never
+      be committed. Store them in your authenticator app only.
+    languages: [c, python, generic]
+    severity: ERROR
+    metadata:
+      category: secrets
+
+  - id: fips-crypto-jwt-token
+    patterns:
+      - pattern-regex: 'eyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}'
+    message: >
+      Possible JWT token found. JWT tokens must never be committed.
+      The .acvp_token file is gitignored — ensure it stays that way.
+    languages: [c, python, generic]
+    severity: ERROR
+    metadata:
+      category: secrets
+
+  - id: fips-crypto-private-key-pem
+    patterns:
+      - pattern-regex: '-----BEGIN (RSA |EC )?PRIVATE KEY-----'
+    message: >
+      PEM private key block found. Private keys must never be committed.
+      Store in .acvp-credentials/ which is gitignored.
+    languages: [c, python, generic]
+    severity: ERROR
+    metadata:
+      category: secrets
