@@ -35,6 +35,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     make \
     pkg-config \
+    # C standard library headers (required for stdint.h, string.h etc.)
+    libc6-dev \
     # cJSON (replaces brew install cjson on macOS)
     libcjson-dev \
     # Boundary analysis
