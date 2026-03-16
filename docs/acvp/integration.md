@@ -51,7 +51,7 @@ NIST operates two ACVTS environments:
 
 | Environment | URL | Purpose |
 |---|---|---|
-| Demo / sandbox | `demo.acvts.nist.gov` | Testing and learning — no real certificates issued |
+| Demo / sandbox | `demo.acvts.nist.gov` | Testing and exploration — no real certificates issued |
 | Production | `acvts.nist.gov` | Real submissions — certificates issued by NIST |
 
 Sprint 9 targets the **demo server**. This is the correct starting point —

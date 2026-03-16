@@ -25,3 +25,4 @@ acvp/response/*.json
 
 claude/
 
+.acvp-credentials/

@@ -89,69 +89,105 @@ Send an email to the ACVP team requesting access to the demo server:
 
 **To:** acvp@nist.gov  
 **Subject:** ACVTS Demo Server Access Request  
-**Body:** Include your name, organisation (or "independent researcher"), and intended use (algorithm validation testing).
+**Body:** Include your name, organisation, and intended use — specifically
+that you have completed local ACVP simulation and want to validate your
+client implementation against NIST-authoritative test vectors.
 
-NIST will reply with instructions and a registration link. Response times
-vary — allow 3–10 business days.
+NIST will reply with detailed instructions including CSR requirements and
+how to submit via their secure file transfer system. Response times vary —
+allow 3–10 business days.
 
-### Step 2 — Complete online registration
+### Step 2 — Review NIST's instructions and prepare to submit your CSR
 
-Follow NIST's registration link. You will:
-- Create a username and password
-- Be shown a QR code for TOTP setup (do this immediately — see Section 4)
-- Receive instructions for submitting a CSR
+NIST's reply email will contain detailed CSR requirements and instructions
+for uploading via their Secure File Collaboration (SFC) service at
+`https://sfc.doc.gov`. There is no online registration portal — the
+entire credential exchange happens via email and SFC.
 
-Do not close the TOTP QR code page until you have scanned it and verified
-your authenticator app is generating valid codes.
+Read the instructions carefully before generating your CSR. When you are
+ready to upload, reply to NIST's email stating your CSR is ready. NIST
+will send you an SFC file request invitation. Note that SFC invitations
+are valid for 30 days from when NIST sends them.
+
+**Important:** NIST cannot accept a CSR via email attachment — it must
+go through SFC.
 
 ### Step 3 — Generate your private key and CSR
 
-Run the following from your repo root. This generates a 2048-bit RSA key
-pair and a CSR. The private key stays on your machine; only the CSR is
-submitted to NIST.
+Run the following from your `.acvp-credentials/` directory. The private
+key stays on your machine — only the CSR is submitted to NIST.
+
+**Filename convention (critical):** NIST requires an exact naming pattern:
+```
+OrganizationName_FirstName_LastName_Demo.key
+OrganizationName_FirstName_LastName_Demo.csr
+```
+No spaces, no more than 3 underscores, not zipped. The ingest process
+will not recognise the file if the name does not match exactly.
 
 ```bash
-# Create a directory for credentials (gitignored — see Section 6)
-mkdir -p .acvp-credentials
+# Generate private key (4096-bit RSA)
+openssl genrsa -out OrganizationName_FirstName_LastName_Demo.key 4096
 
-# Generate private key (2048-bit RSA)
-openssl genrsa -out .acvp-credentials/client.key 2048
-
-# Generate CSR
-openssl req -new \
-  -key .acvp-credentials/client.key \
-  -out .acvp-credentials/client.csr \
-  -subj "/CN=fips-crypto-demo/O=YourName/C=CA"
+# Generate CSR (SHA-256 signed)
+openssl req -out OrganizationName_FirstName_LastName_Demo.csr \
+  -key OrganizationName_FirstName_LastName_Demo.key \
+  -new -sha256 \
+  -subj "/emailAddress=you@domain.com/CN=Firstname Lastname/O=YourOrg/L=City/ST=Province/C=CA"
 ```
 
-Adjust `/CN=`, `/O=`, and `/C=` to match your identity. NIST may have
-specific requirements for these fields — check their registration instructions.
+**Required DN attributes:**
+- `emailAddress` — your email address (note: use `emailAddress`, not `EMAILADDRESS`)
+- `CN` — your first and last name, or organisation name. No URLs.
+- `C` — exactly 2 letters
+
+`OU`, `L`, and `ST` are optional but recommended for completeness.
 
 Verify the CSR looks correct:
 ```bash
-openssl req -text -noout -in .acvp-credentials/client.csr
+openssl req -text -noout -in OrganizationName_FirstName_LastName_Demo.csr
 ```
 
-### Step 4 — Submit the CSR to NIST
+Confirm:
+- `Subject` contains `emailAddress`, `CN`, and `C`
+- `Public-Key` shows `4096 bit`
+- `Signature Algorithm` shows `sha256WithRSAEncryption`
 
-Follow NIST's instructions for CSR submission (typically via their
-registration portal or by email). Submit the contents of
-`.acvp-credentials/client.csr` — not the private key.
+### Step 4 — Submit the CSR via SFC
 
-### Step 5 — Receive and store your signed certificate
+Once you have replied to NIST's email and received their SFC file request
+invitation:
 
-NIST will return a signed certificate file (typically `client.crt` or
-`client.pem`). Save it to `.acvp-credentials/client.crt`.
+1. Go to `https://sfc.doc.gov` and create an account if you don't have one
+2. Upload your `.csr` file — exactly as named, not zipped
+3. Address the upload to `jason.arnold@nist.gov` within SFC if using an
+   existing SFC account
+
+Submit only the `.csr` file — not the private key.
+
+### Step 5 — Receive certificate and TOTP seed
+
+NIST will validate your CSR and return both the signed certificate and
+your TOTP seed via an SFC message reply. Both arrive together — there is
+no separate registration portal step.
+
+Save the certificate to `.acvp-credentials/` using the same base name as
+your key and CSR:
+```
+OrganizationName_FirstName_LastName_Demo.crt
+```
 
 Verify the certificate:
 ```bash
-openssl x509 -text -noout -in .acvp-credentials/client.crt
+openssl x509 -text -noout -in OrganizationName_FirstName_LastName_Demo.crt
 ```
 
 Check that:
 - `Issuer` shows NIST's CA
 - `Subject` matches what you put in your CSR
 - `Validity` shows the certificate has not expired
+
+Then proceed immediately to Section 4 to set up your TOTP seed.
 
 ---
 
@@ -168,20 +204,28 @@ Any RFC 6238 compliant app works. Recommended options:
 | Google Authenticator | iOS, Android | Simple, widely used |
 | Microsoft Authenticator | iOS, Android | Works with any TOTP seed |
 
-### Step 2 — Scan the QR code
+### Step 2 — Import the TOTP seed
 
-During registration, NIST displays a QR code. Open your authenticator
-app and scan it. The app will add a new entry (typically labelled with
-the server name or your username).
+NIST delivers your TOTP seed via SFC alongside your certificate — there
+is no QR code on a registration page. The seed will typically be a text
+string or a `otpauth://` URI.
 
-**If you miss the QR code:** Contact NIST to have your TOTP seed reset.
-There is no way to recover it after the registration page is closed.
+In your authenticator app, add the account manually using the seed value
+NIST provided. Most apps have an "Enter setup key" or "Manual entry"
+option alongside the QR code scanner.
+
+**If your app only accepts QR codes:** Use a tool like `qrencode` to
+convert the `otpauth://` URI to a scannable QR code locally:
+```bash
+qrencode -t UTF8 'otpauth://totp/...'
+```
 
 ### Step 3 — Verify your setup
 
-Wait for the app to show a 6-digit code. In the NIST registration portal,
-enter the code to confirm your TOTP is working correctly before finalising
-registration.
+Once added, your app will show a 6-digit code that changes every 30
+seconds. Verify it works by attempting a login to the demo server. If
+the TOTP code is rejected, check that your system clock is accurate
+(within ~30 seconds of UTC).
 
 ### Step 4 — Back up your TOTP seed
 
