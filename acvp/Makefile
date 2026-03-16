@@ -23,7 +23,7 @@
 # ---------------------------------------------------------------------------
 CC     = gcc
 CFLAGS = -Wall -Wextra -std=c99
-PYTHON = ../.venv/bin/$(PYTHON)
+PYTHON = python3
 
 # Include paths:
 #   -I../include   : project headers (aes.h, sha256.h, hmac.h, pbkdf2.h, ...)
