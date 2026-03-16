@@ -46,3 +46,42 @@ acvp-test: compile
 
 acvp-clean:
 	$(MAKE) -C acvp clean
+# ---------------------------------------------------------------------------
+# Docker targets (Sprint 10)
+# ---------------------------------------------------------------------------
+DOCKER_IMAGE = fips-crypto:dev
+DOCKER_RUN   = docker run --rm \
+                 -v "$(PWD)":/workspace \
+                 -v "$(PWD)/.acvp-credentials":/workspace/.acvp-credentials:ro \
+                 $(DOCKER_IMAGE)
+
+.PHONY: docker-build docker-test docker-semgrep docker-shell
+
+## docker-build : build the fips-crypto:dev image
+docker-build:
+	docker build -t $(DOCKER_IMAGE) .
+
+## docker-test  : run full test suite inside the container
+##                (make test + make acvp-test)
+docker-test: docker-build
+	$(DOCKER_RUN) sh -c "make test && make acvp-test"
+
+## docker-semgrep : run SAST and secrets scan inside the container
+docker-semgrep: docker-build
+	$(DOCKER_RUN) sh -c "semgrep --config .semgrep.yml src/ acvp/src/ tools/"
+
+## docker-shell : interactive shell with repo mounted
+docker-shell: docker-build
+	docker run --rm -it \
+	  -v "$(PWD)":/workspace \
+	  -v "$(PWD)/.acvp-credentials":/workspace/.acvp-credentials:ro \
+	  $(DOCKER_IMAGE) /bin/bash
+
+# ---------------------------------------------------------------------------
+# Semgrep targets (host — requires semgrep installed in .venv)
+# ---------------------------------------------------------------------------
+.PHONY: semgrep
+
+## semgrep : run SAST and secrets scan on the host
+semgrep:
+	.venv/bin/semgrep --config .semgrep.yml src/ acvp/src/ tools/

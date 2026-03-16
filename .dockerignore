@@ -1,0 +1,38 @@
+# .dockerignore — files excluded from the Docker build context
+#
+# The repo is mounted at runtime, not copied into the image.
+# This file is a second line of defence — it ensures secrets and
+# build artifacts are never accidentally included in a build context
+# if someone modifies the Dockerfile to COPY the repo.
+
+# ---------------------------------------------------------------------------
+# Credentials — must never enter the image under any circumstances
+# ---------------------------------------------------------------------------
+.acvp-credentials/
+.acvp_token
+
+# ---------------------------------------------------------------------------
+# Build artifacts — not needed in the image
+# ---------------------------------------------------------------------------
+src/*.o
+acvp/acvp_runner
+acvp/request/
+acvp/response/
+
+# ---------------------------------------------------------------------------
+# Python environments — image has its own venv at /opt/venv
+# ---------------------------------------------------------------------------
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# ---------------------------------------------------------------------------
+# macOS noise
+# ---------------------------------------------------------------------------
+.DS_Store
+
+# ---------------------------------------------------------------------------
+# Git history — not needed in build context
+# ---------------------------------------------------------------------------
+.git/
