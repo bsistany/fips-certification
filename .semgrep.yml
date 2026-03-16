@@ -118,7 +118,7 @@ rules:
       Possible hardcoded cryptographic key or secret. Keys must never be
       committed to the repository. Use environment variables or a secrets
       manager.
-    languages: [c, python, generic]
+    languages: [c, python]
     severity: ERROR
     metadata:
       category: secrets
@@ -129,7 +129,7 @@ rules:
     message: >
       Possible hardcoded TOTP seed (base32 encoded). TOTP seeds must never
       be committed. Store them in your authenticator app only.
-    languages: [c, python, generic]
+    languages: [c, python]
     severity: ERROR
     metadata:
       category: secrets
@@ -140,7 +140,7 @@ rules:
     message: >
       Possible JWT token found. JWT tokens must never be committed.
       The .acvp_token file is gitignored — ensure it stays that way.
-    languages: [c, python, generic]
+    languages: [c, python]
     severity: ERROR
     metadata:
       category: secrets
@@ -151,7 +151,7 @@ rules:
     message: >
       PEM private key block found. Private keys must never be committed.
       Store in .acvp-credentials/ which is gitignored.
-    languages: [c, python, generic]
+    languages: [c, python]
     severity: ERROR
     metadata:
       category: secrets
