@@ -106,8 +106,15 @@ entire credential exchange happens via email and SFC.
 
 Read the instructions carefully before generating your CSR. When you are
 ready to upload, reply to NIST's email stating your CSR is ready. NIST
-will send you an SFC file request invitation. Note that SFC invitations
-are valid for 30 days from when NIST sends them.
+will then send you an SFC invitation — this arrives as a **secure message
+inside SFC itself**, not as a regular email. Create your SFC account at
+`https://sfc.doc.gov` using the same email address you used in your
+access request, then check your SFC Inbox for the invitation message.
+
+**SFC account note:** SFC accounts go dormant after a period of inactivity
+per NIST/DoC policy. A dormant account cannot self-reactivate — only NIST
+can reactivate it by sending a new message to your registered email address.
+Keep this in mind if you need to renew credentials in the future.
 
 **Important:** NIST cannot accept a CSR via email attachment — it must
 go through SFC.
@@ -155,15 +162,22 @@ Confirm:
 
 ### Step 4 — Submit the CSR via SFC
 
-Once you have replied to NIST's email and received their SFC file request
-invitation:
+Once your SFC account is set up and NIST's invitation message is in your
+SFC Inbox:
 
-1. Go to `https://sfc.doc.gov` and create an account if you don't have one
-2. Upload your `.csr` file — exactly as named, not zipped
-3. Address the upload to `jason.arnold@nist.gov` within SFC if using an
-   existing SFC account
+1. Go to `https://sfc.doc.gov` and log in
+2. Click **Inbox** in the left-hand menu navigation
+3. Open the message from NIST requesting your CSR
+4. Click **Reply All** — a message window will open
+5. Click the **Attach icon** (looks like a page with a folded corner)
+6. Navigate to your `.acvp-credentials/` directory and select your `.csr` file
+7. Optionally add a short comment, then click the blue **Send** button
 
-Submit only the `.csr` file — not the private key.
+**Important:** Do not use the "File Upload" feature in the SFC interface —
+it will result in an error. The CSR must be attached to a message reply
+as described above.
+
+Submit only the `.csr` file — not the private key, not zipped.
 
 ### Step 5 — Receive certificate and TOTP seed
 
