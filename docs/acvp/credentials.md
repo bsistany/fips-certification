@@ -188,12 +188,12 @@ no separate registration portal step.
 Save the certificate to `.acvp-credentials/` using the same base name as
 your key and CSR:
 ```
-OrganizationName_FirstName_LastName_Demo.crt
+OrganizationName_FirstName_LastName_Demo.cer
 ```
 
 Verify the certificate:
 ```bash
-openssl x509 -text -noout -in OrganizationName_FirstName_LastName_Demo.crt
+openssl x509 -text -noout -in OrganizationName_FirstName_LastName_Demo.cer
 ```
 
 Check that:
@@ -220,19 +220,29 @@ Any RFC 6238 compliant app works. Recommended options:
 
 ### Step 2 — Import the TOTP seed
 
-NIST delivers your TOTP seed via SFC alongside your certificate — there
-is no QR code on a registration page. The seed will typically be a text
-string or a `otpauth://` URI.
+NIST delivers your TOTP seed via SFC alongside your certificate as a
+plain hex string in a `.txt` file. Authenticator apps require the seed
+in base32 encoding — convert it first:
 
-In your authenticator app, add the account manually using the seed value
-NIST provided. Most apps have an "Enter setup key" or "Manual entry"
-option alongside the QR code scanner.
-
-**If your app only accepts QR codes:** Use a tool like `qrencode` to
-convert the `otpauth://` URI to a scannable QR code locally:
 ```bash
-qrencode -t UTF8 'otpauth://totp/...'
+python3 -c "
+import base64, binascii
+hex_seed = 'YOUR_HEX_STRING_HERE'
+raw = binascii.unhexlify(hex_seed)
+print(base64.b32encode(raw).decode())
+"
 ```
+
+Replace `YOUR_HEX_STRING_HERE` with the hex string from the file. The
+output is the base32 seed your authenticator app expects.
+
+In your authenticator app, choose **Enter setup key** or **Manual entry**:
+- Account name: `ACVTS Demo`
+- Key: paste the base32 string from the conversion above
+- Type: **Time-based**
+
+Tap Save. The app will immediately show a 6-digit code changing every
+30 seconds.
 
 ### Step 3 — Verify your setup
 
@@ -249,7 +259,7 @@ you will be locked out and will need to contact NIST to reset your 2FA.
 
 **Secure backup options:**
 - Export the seed to your password manager (1Password, Bitwarden, etc.)
-- Print the QR code and store it securely offline
+- Store the original hex seed file in an encrypted location (e.g. encrypted disk image)
 
 ---
 
@@ -263,9 +273,9 @@ which allows HTTPS clients to use it without referencing a file path.
 ```bash
 # Combine private key and certificate into a PKCS#12 bundle
 openssl pkcs12 -export \
-  -inkey .acvp-credentials/client.key \
-  -in    .acvp-credentials/client.crt \
-  -out   .acvp-credentials/client.p12 \
+  -inkey .acvp-credentials/Independent_Bahman_Sistany_Demo.key \
+  -in    .acvp-credentials/Independent_Bahman_Sistany_Demo.cer \
+  -out   .acvp-credentials/Independent_Bahman_Sistany_Demo.p12 \
   -name  "ACVTS Demo Client"
 ```
 
@@ -315,8 +325,8 @@ What **can** be committed safely:
 
 | File | Why safe |
 |---|---|
-| `.acvp-credentials/client.csr` | Contains only your public key — no secrets |
-| `.acvp-credentials/client.crt` | Contains only your signed public certificate |
+| `.acvp-credentials/Independent_Bahman_Sistany_Demo.csr` | Contains only your public key — no secrets |
+| `.acvp-credentials/Independent_Bahman_Sistany_Demo.cer` | Contains only your signed public certificate |
 | `acvp/config/capabilities.json` | Algorithm registration payload — no secrets |
 
 ---
@@ -333,7 +343,7 @@ this is typically 1–2 years. When your certificate expires:
 
 To check your certificate's expiry:
 ```bash
-openssl x509 -enddate -noout -in .acvp-credentials/client.crt
+openssl x509 -enddate -noout -in .acvp-credentials/Independent_Bahman_Sistany_Demo.cer
 ```
 
 Set a calendar reminder 30 days before the expiry date.
