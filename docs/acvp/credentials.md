@@ -221,7 +221,7 @@ Any RFC 6238 compliant app works. Recommended options:
 ### Step 2 — Import the TOTP seed
 
 NIST delivers your TOTP seed via SFC alongside your certificate as a
-plain hex string in a `.txt` file. Authenticator apps require the seed
+BASE64 encoded seed in a `.txt` file. Authenticator apps require the seed
 in base32 encoding — convert it first:
 
 ```bash
